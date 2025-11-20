@@ -35,6 +35,7 @@ if str(ROOT_DIR) not in sys.path:
 
 from idea.training.token_attention_trainer_efficient import TokenAttentionTrainer
 from idea.config import DEFAULT_EMBEDDING_MODEL
+from idea.utils.token_utils import TOKEN_MAX_LENGTH
 
 
 def main():
@@ -143,6 +144,17 @@ def main():
         action="store_true",
         help="Force retrain even if model already exists"
     )
+    parser.add_argument(
+        "--max-length",
+        type=int,
+        default=TOKEN_MAX_LENGTH,
+        help=f"Tokenizer max_length for token attention (default: {TOKEN_MAX_LENGTH})"
+    )
+    parser.add_argument(
+        "--mixed-precision",
+        action="store_true",
+        help="Enable torch.autocast for faster training (fp16)."
+    )
 
     args = parser.parse_args()
 
@@ -165,6 +177,8 @@ def main():
         focal_gamma=args.focal_gamma,
         hidden_dim=args.hidden_dim,
         num_heads=args.num_heads,
+        max_length=args.max_length,
+        mixed_precision=args.mixed_precision,
         force=args.force
     )
 

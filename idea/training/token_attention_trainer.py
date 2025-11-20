@@ -28,7 +28,7 @@ if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
 
 from idea.utils.model_cache import get_shared_embedding_model
-from idea.utils.token_utils import extract_token_embeddings
+from idea.utils.token_utils import extract_token_embeddings, TOKEN_MAX_LENGTH
 from idea.config import E5PrefixConfig, DEFAULT_EMBEDDING_MODEL
 from idea.inference.token_attention_classifier import LightweightTokenClassifier, MultiHeadTokenClassifier
 
@@ -123,7 +123,7 @@ class TokenAttentionTrainer:
 
         return df_train, df_eval
 
-    def prepare_embeddings(self, df, split_name="train"):
+    def prepare_embeddings(self, df, split_name="train", max_length: int = TOKEN_MAX_LENGTH):
         """Extract token-level embeddings for all questions"""
         logger.info(f"Extracting token embeddings for {split_name} set...")
 
@@ -136,7 +136,7 @@ class TokenAttentionTrainer:
         token_embeddings, attention_masks = extract_token_embeddings(
             model=self.embedding_model,
             texts=questions_prefixed,
-            max_length=512,
+            max_length=max_length,
             normalize=True,
             batch_size=32,
             show_progress=True
@@ -160,6 +160,7 @@ class TokenAttentionTrainer:
         focal_gamma=2.0,
         hidden_dim=256,  # For lightweight variant
         num_heads=8,     # For multihead variant
+        max_length: int = TOKEN_MAX_LENGTH,
         force=False
     ):
         """
@@ -199,6 +200,7 @@ class TokenAttentionTrainer:
         # Load embedding model
         logger.info(f"Loading embedding model: {self.embedding_model_name}")
         self.embedding_model = get_shared_embedding_model(self.embedding_model_name)
+        logger.info("Tokenization max_length: %d", max_length)
         token_dim = self.embedding_model.get_sentence_embedding_dimension()
 
         # Load data
@@ -213,8 +215,8 @@ class TokenAttentionTrainer:
         eval_labels = self.tag_encoder.transform(df_eval['tag'])
 
         # Extract token embeddings
-        train_token_embs, train_masks = self.prepare_embeddings(df_train, "train")
-        eval_token_embs, eval_masks = self.prepare_embeddings(df_eval, "eval")
+        train_token_embs, train_masks = self.prepare_embeddings(df_train, "train", max_length=max_length)
+        eval_token_embs, eval_masks = self.prepare_embeddings(df_eval, "eval", max_length=max_length)
 
         # Create datasets
         train_dataset = TokenDataset(train_token_embs, train_masks, train_labels)

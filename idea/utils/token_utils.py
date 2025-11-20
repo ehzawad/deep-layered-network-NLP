@@ -16,11 +16,13 @@ from sentence_transformers import SentenceTransformer
 
 logger = logging.getLogger(__name__)
 
+# Shared sequence length for token-level models to balance speed/coverage.
+TOKEN_MAX_LENGTH = 256
 
 def extract_token_embeddings(
     model: SentenceTransformer,
     texts: List[str],
-    max_length: int = 512,
+    max_length: int = TOKEN_MAX_LENGTH,
     normalize: bool = True,
     batch_size: int = 32,
     show_progress: bool = True
@@ -34,7 +36,7 @@ def extract_token_embeddings(
     Args:
         model: SentenceTransformer instance (e.g., E5-large)
         texts: List of input texts to encode
-        max_length: Maximum sequence length (default: 512)
+        max_length: Maximum sequence length (default: 256)
         normalize: Whether to L2-normalize embeddings (default: True)
         batch_size: Batch size for encoding (default: 32)
         show_progress: Show progress bar (default: False)
@@ -125,7 +127,7 @@ def extract_token_embeddings(
 def extract_token_embeddings_numpy(
     model: SentenceTransformer,
     texts: List[str],
-    max_length: int = 512,
+    max_length: int = TOKEN_MAX_LENGTH,
     normalize: bool = True,
     batch_size: int = 32,
     show_progress: bool = False

@@ -22,7 +22,7 @@ from ..utils.model_cache import get_shared_embedding_model
 from ..config import TagClassifierConfig, E5PrefixConfig
 from .unified_tag_classifier import UnifiedTagClassifier
 from .token_attention_classifier import LightweightTokenClassifier, MultiHeadTokenClassifier
-from ..utils.token_utils import extract_token_embeddings
+from ..utils.token_utils import extract_token_embeddings, TOKEN_MAX_LENGTH
 
 logger = logging.getLogger(__name__)
 
@@ -256,7 +256,7 @@ class TagClassifierMatcher:
             token_embeddings, attention_mask = extract_token_embeddings(
                 model=self.embedding_model,
                 texts=[question_prefixed],
-                max_length=512,
+                max_length=TOKEN_MAX_LENGTH,
                 normalize=True,
                 batch_size=1,
                 show_progress=False

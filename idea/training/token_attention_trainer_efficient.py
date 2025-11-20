@@ -29,6 +29,7 @@ if str(ROOT_DIR) not in sys.path:
 
 from idea.utils.model_cache import get_shared_embedding_model
 from idea.config import E5PrefixConfig, DEFAULT_EMBEDDING_MODEL
+from idea.utils.token_utils import TOKEN_MAX_LENGTH
 from idea.inference.token_attention_classifier import LightweightTokenClassifier, MultiHeadTokenClassifier
 
 # Setup logging
@@ -42,13 +43,14 @@ logger = logging.getLogger(__name__)
 class OnTheFlyTokenDataset(Dataset):
     """Dataset that extracts token embeddings on-the-fly during training"""
 
-    def __init__(self, questions, labels, embedding_model, device):
+    def __init__(self, questions, labels, embedding_model, device, max_length: int = TOKEN_MAX_LENGTH):
         """
         Args:
             questions: List of question strings
             labels: Array of label indices
             embedding_model: SentenceTransformer model
             device: torch device for embedding extraction
+            max_length: tokenizer max sequence length
         """
         self.questions = questions
         self.labels = labels
@@ -56,6 +58,7 @@ class OnTheFlyTokenDataset(Dataset):
         self.device = device
         self.tokenizer = embedding_model.tokenizer
         self.transformer_model = embedding_model[0].auto_model
+        self.max_length = max_length
 
     def __len__(self):
         return len(self.labels)
@@ -73,7 +76,7 @@ class OnTheFlyTokenDataset(Dataset):
             [question_prefixed],
             padding=True,
             truncation=True,
-            max_length=512,
+            max_length=self.max_length,
             return_tensors='pt',
             return_attention_mask=True
         )
@@ -192,6 +195,8 @@ class TokenAttentionTrainer:
         focal_gamma=2.0,
         hidden_dim=256,
         num_heads=8,
+        max_length: int = TOKEN_MAX_LENGTH,
+        mixed_precision: bool = False,
         force=False
     ):
         """Train token attention classifier with on-the-fly embedding extraction"""
@@ -216,6 +221,7 @@ class TokenAttentionTrainer:
         logger.info(f"Loading embedding model: {self.embedding_model_name}")
         self.embedding_model = get_shared_embedding_model(self.embedding_model_name)
         token_dim = self.embedding_model.get_sentence_embedding_dimension()
+        logger.info("Tokenization max_length: %d", max_length)
 
         # Load data
         df_train, df_eval = self.load_data()
@@ -234,13 +240,15 @@ class TokenAttentionTrainer:
             df_train['question'].tolist(),
             train_labels,
             self.embedding_model,
-            self.device
+            self.device,
+            max_length=max_length
         )
         eval_dataset = OnTheFlyTokenDataset(
             df_eval['question'].tolist(),
             eval_labels,
             self.embedding_model,
-            self.device
+            self.device,
+            max_length=max_length
         )
 
         train_loader = DataLoader(
@@ -310,8 +318,13 @@ class TokenAttentionTrainer:
                 labels = labels.to(self.device)
 
                 optimizer.zero_grad()
-                logits = model(token_embs, masks)
-                loss = criterion(logits, labels)
+                with torch.autocast(
+                    device_type=self.device.type,
+                    dtype=torch.float16,
+                    enabled=mixed_precision
+                ):
+                    logits = model(token_embs, masks)
+                    loss = criterion(logits, labels)
                 loss.backward()
                 optimizer.step()
 
@@ -335,8 +348,13 @@ class TokenAttentionTrainer:
                     masks = masks.to(self.device)
                     labels = labels.to(self.device)
 
-                    logits = model(token_embs, masks)
-                    loss = criterion(logits, labels)
+                    with torch.autocast(
+                        device_type=self.device.type,
+                        dtype=torch.float16,
+                        enabled=mixed_precision
+                    ):
+                        logits = model(token_embs, masks)
+                        loss = criterion(logits, labels)
 
                     val_loss += loss.item() * len(labels)
                     _, predicted = torch.max(logits, 1)

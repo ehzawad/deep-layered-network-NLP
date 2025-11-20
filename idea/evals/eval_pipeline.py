@@ -18,8 +18,9 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from idea import IdeaPipeline
-from idea.utils.artifacts import ensure_all
+from idea import IdeaPipeline, IdeaConfig
+from idea.config import TagClassifierConfig
+from idea.utils.artifacts import ensure_all, ensure_faiss_index
 
 
 def parse_args() -> argparse.Namespace:
@@ -39,6 +40,17 @@ def parse_args() -> argparse.Namespace:
         "--output-csv",
         default=None,
         help="Optional path to emit per-row evaluation details as CSV (default: disabled)"
+    )
+    parser.add_argument(
+        "--use-token-attention",
+        action="store_true",
+        help="Use the token-attention classifier instead of the legacy unified classifier."
+    )
+    parser.add_argument(
+        "--token-variant",
+        default="lightweight",
+        choices=["lightweight", "multihead"],
+        help="Token-attention variant to use (default: lightweight)."
     )
     return parser.parse_args()
 
@@ -68,8 +80,30 @@ def main():
         return
 
     # Initialize pipeline
-    ensure_all()
-    pipeline = IdeaPipeline()
+    if args.use_token_attention:
+        # Token attention only needs the FAISS leg; skip auto-training the legacy classifier.
+        ensure_faiss_index()
+        classifier_config = TagClassifierConfig(
+            use_token_attention=True,
+            token_attention_variant=args.token_variant
+        )
+
+        # Fail fast with a friendly hint if the model isn't present.
+        token_model = classifier_config.models_dir / f"token_attention_{args.token_variant}.pth"
+        if not token_model.exists():
+            raise FileNotFoundError(
+                (
+                    f"Token-attention model not found at {token_model}. "
+                    "Train it first via: "
+                    f"python idea/training/train_token_attention.py --variant {args.token_variant} --force"
+                )
+            )
+
+        pipeline = IdeaPipeline(IdeaConfig(classifier=classifier_config))
+    else:
+        ensure_all()
+        pipeline = IdeaPipeline()
+
     pipeline.initialize()
 
     total = len(rows)

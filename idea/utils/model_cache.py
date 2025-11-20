@@ -110,7 +110,7 @@ def get_shared_embedding_model(
         _CACHED_DEVICE = actual_device
 
         logger.info("  Model loaded successfully on %s", actual_device.upper())
-        logger.info("  Max sequence length: %s", _SHARED_EMBEDDING_MODEL.max_seq_length)
+        logger.info("  Model max sequence length (intrinsic): %s", _SHARED_EMBEDDING_MODEL.max_seq_length)
         logger.info("  Embedding dimension: %s", _SHARED_EMBEDDING_MODEL.get_sentence_embedding_dimension())
     else:
         logger.debug("Reusing cached embedding model: %s on %s", model_name, _CACHED_DEVICE)
