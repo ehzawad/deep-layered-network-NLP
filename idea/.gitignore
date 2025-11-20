@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv
+
+# Model / index binaries
+*.index
+*.faiss
+*.pt
+*.pth
+*.bin
+*.ckpt
+*.ckpt.*
+*.onnx
+*.tflite
+*.mlmodel
+*.pb
+*.h5
+*.npz
+*.npy
+*.pkl
+*.joblib
+*.model

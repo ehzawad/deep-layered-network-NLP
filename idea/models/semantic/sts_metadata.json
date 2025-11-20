@@ -1,0 +1,19 @@
+{
+  "model": "intfloat/multilingual-e5-large-instruct",
+  "embedding_dim": 1024,
+  "normalize_embeddings": true,
+  "num_questions": 36530,
+  "num_tags": 203,
+  "num_classes": 0,
+  "classes": [],
+  "class_sizes": {},
+  "created_at": "2025-11-20T11:17:47.724949",
+  "indices": {
+    "global": 36530
+  },
+  "fingerprint": "3a4a1df407e675d56a4598f6bf701f6667168f43bf27771c58492a7d8587238e",
+  "use_prefixes": true,
+  "sts_query_prefix": "query: ",
+  "sts_passage_prefix": "passage: ",
+  "classifier_query_prefix": "query: "
+}

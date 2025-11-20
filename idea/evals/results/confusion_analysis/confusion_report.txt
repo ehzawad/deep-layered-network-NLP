@@ -1,0 +1,316 @@
+================================================================================
+CONFUSION MATRIX ANALYSIS REPORT
+================================================================================
+
+Total samples: 7410
+Overall accuracy: 91.71%
+Total tags: 195
+
+================================================================================
+TOP 20 MOST CONFUSED TAG PAIRS
+================================================================================
+
+1. smart_card_collection_fees ⇄ smart_card_fee
+   Expected→Predicted: 10 errors
+   Predicted→Expected: 14 errors
+   Total bidirectional: 24 errors
+   Pattern: SYMMETRIC (ratio: 1.40)
+   Example questions (expected: smart_card_collection_fees):
+     - স্মার্ট এনআইডি পেতে কি ফি পেমেন্ট করতে হয়?
+     - স্মার্ট কার্ড নিতে কি কোনো মানি অর্ডার দিতে হবে?
+
+2. smart_card_fee ⇄ smart_card_collection_fees
+   Expected→Predicted: 14 errors
+   Predicted→Expected: 10 errors
+   Total bidirectional: 24 errors
+   Pattern: SYMMETRIC (ratio: 1.40)
+   Example questions (expected: smart_card_fee):
+     - স্মার্ট কার্ড তোলার সময় কি ফি দিতে হবে?
+     - স্মার্ট কার্ড পাওয়ার জন্য কি টাকা লাগে?
+
+3. correction_application_status ⇄ correction_application_current_status
+   Expected→Predicted: 6 errors
+   Predicted→Expected: 16 errors
+   Total bidirectional: 22 errors
+   Pattern: ASYMMETRIC (ratio: 2.67)
+   Example questions (expected: correction_application_status):
+     - আমার সংশোধন আবেদন প্রসেসিং স্টেজে আছে কি?
+     - ডাটা সংশোধনের কাজটা কেমন চলছে, জানতে চাই।
+
+4. correction_application_current_status ⇄ correction_application_status
+   Expected→Predicted: 16 errors
+   Predicted→Expected: 6 errors
+   Total bidirectional: 22 errors
+   Pattern: ASYMMETRIC (ratio: 2.67)
+   Example questions (expected: correction_application_current_status):
+     - আমার এনআইডি সংশোধন আবেদনের বর্তমান অবস্থা জানতে চাই, কোথায় দেখতে পারি?
+     - এনআইডি কার্ড সংশোধনের অগ্রগতি জানতে চাই।
+
+5. new_voter_online_what_documents_to_submit ⇄ new_voter_apply_online_what_documents_needed
+   Expected→Predicted: 7 errors
+   Predicted→Expected: 14 errors
+   Total bidirectional: 21 errors
+   Pattern: ASYMMETRIC (ratio: 2.00)
+   Example questions (expected: new_voter_online_what_documents_to_submit):
+     - অনলাইন আবেদন করার পর ডকুমেন্টেশনে কী কী প্রয়োজন?
+     - অনলাইন রেজিস্ট্রেশনের পর অফিসে কী কী কপি জমা দিতে হবে?
+
+6. new_voter_apply_online_what_documents_needed ⇄ new_voter_online_what_documents_to_submit
+   Expected→Predicted: 14 errors
+   Predicted→Expected: 7 errors
+   Total bidirectional: 21 errors
+   Pattern: ASYMMETRIC (ratio: 2.00)
+   Example questions (expected: new_voter_apply_online_what_documents_needed):
+     - অনলাইন নতুন ভোটার রেজিস্ট্রেশন শেষে কোন নথিপত্র দাখিল করতে হবে জানাবেন?
+     - অনলাইনে সাবমিশন করার পর কাগজপত্রের কি কি লাগবে?
+
+7. card_correction_request_failed_query_regarding_refund_fees ⇄ card_correction_request_canceled_by_consumer_regarding_refund_fees
+   Expected→Predicted: 10 errors
+   Predicted→Expected: 10 errors
+   Total bidirectional: 20 errors
+   Pattern: SYMMETRIC (ratio: 1.00)
+   Example questions (expected: card_correction_request_failed_query_regarding_refund_fees):
+     - আবেদন বাতিলের পর ফি ফেরত নেওয়ার উপায় আছে কি?
+     - সংশোধনের জন্য দেয়া ফিস রিজেক্ট হলে ফেরত পাওয়া যাবে কি?
+
+8. no_husband_name_in_smart_card ⇄ husband_name_previous_card
+   Expected→Predicted: 9 errors
+   Predicted→Expected: 11 errors
+   Total bidirectional: 20 errors
+   Pattern: SYMMETRIC (ratio: 1.22)
+   Example questions (expected: no_husband_name_in_smart_card):
+     - নতুন প্লাস্টিক এনআইডিতে স্বামীর নাম বাদ পড়েছে—কেন এমনটা?
+     - আগের আইডিতে স্বামীর নাম ছিল, নতুন ই-এনআইডিতে নেই—কী কারণে?
+
+9. card_correction_request_canceled_by_consumer_regarding_refund_fees ⇄ card_correction_request_failed_query_regarding_refund_fees
+   Expected→Predicted: 10 errors
+   Predicted→Expected: 10 errors
+   Total bidirectional: 20 errors
+   Pattern: SYMMETRIC (ratio: 1.00)
+   Example questions (expected: card_correction_request_canceled_by_consumer_regarding_refund_fees):
+     - আবেদন না করলে ফি কি পরবর্তী সময়ে ব্যবহার করা যায়, নাকি রিফান্ড?
+     - আবেদন না করলে ফি ফেরত নেওয়ার জন্য কোনো ফর্ম পূরণ করতে হয়?
+
+10. husband_name_previous_card ⇄ no_husband_name_in_smart_card
+   Expected→Predicted: 11 errors
+   Predicted→Expected: 9 errors
+   Total bidirectional: 20 errors
+   Pattern: SYMMETRIC (ratio: 1.22)
+   Example questions (expected: husband_name_previous_card):
+     - স্মার্ট এনআইডিতে স্বামীর নাম হারিয়ে গেছে মনে হচ্ছে—আসলে কি দেখানো হয় না?
+     - স্মার্ট আইডিতে স্বামীর নাম নেই—ইসি কি ইচ্ছাকৃতভাবে বাদ দিয়েছে?
+
+11. card_correction_request_failed_query_regarding_repayment_fees ⇄ correction_application_rejected_need_new_fee
+   Expected→Predicted: 14 errors
+   Predicted→Expected: 5 errors
+   Total bidirectional: 19 errors
+   Pattern: ASYMMETRIC (ratio: 2.80)
+   Example questions (expected: card_correction_request_failed_query_regarding_repayment_fees):
+     - খারিজ হওয়ার পর পুনরায় এনআইডি আপডেটে কি ফি দিতে হয়?
+     - বাতিল হওয়া এডিট আবেদন রিফাইল করতে কি ফি দিতে হবে?
+
+12. correction_application_rejected_need_new_fee ⇄ card_correction_request_failed_query_regarding_repayment_fees
+   Expected→Predicted: 5 errors
+   Predicted→Expected: 14 errors
+   Total bidirectional: 19 errors
+   Pattern: ASYMMETRIC (ratio: 2.80)
+   Example questions (expected: correction_application_rejected_need_new_fee):
+     - ক্যানসেল হওয়ার পর সংশোধন আবেদন করলে কি টাকা আবার লাগবে?
+     - আবেদন রিজেক্ট হলে আবার আবেদন ফি কি পরিশোধ করতে হবে?
+
+13. reissue_apply_why_pending_and_urgent_reissue_seven_days_over ⇄ online_application_pending
+   Expected→Predicted: 2 errors
+   Predicted→Expected: 13 errors
+   Total bidirectional: 15 errors
+   Pattern: ASYMMETRIC (ratio: 6.50)
+   Example questions (expected: reissue_apply_why_pending_and_urgent_reissue_seven_days_over):
+     - কার্ড রিইস্যু প্রসেসে আটকে আছে বলছে, কবে নাগাদ পাবো বলতে পারবেন?
+     - রিইস্যু রিকোয়েস্ট সাবমিট করে অনেকদিন হলো, সিস্টেমে প্রসেসিং দেখায়—এটা কতদিন চলবে?
+
+14. online_application_pending ⇄ reissue_apply_why_pending_and_urgent_reissue_seven_days_over
+   Expected→Predicted: 13 errors
+   Predicted→Expected: 2 errors
+   Total bidirectional: 15 errors
+   Pattern: ASYMMETRIC (ratio: 6.50)
+   Example questions (expected: online_application_pending):
+     - পুনরায় ইস্যুর জন্য আবেদন করেছি, এখনো কোনো আপডেট নেই—কখন পাওয়া যাবে?
+     - এনআইডি পুনঃইস্যুর জন্য অনলাইনে আবেদন করেছি, এখনো কোনো বার্তা পাইনি—কারণটা কী?
+
+15. smart_card_lost_how_to_get_new_one_again ⇄ smart_card_lost_reissue
+   Expected→Predicted: 8 errors
+   Predicted→Expected: 5 errors
+   Total bidirectional: 13 errors
+   Pattern: SYMMETRIC (ratio: 1.60)
+   Example questions (expected: smart_card_lost_how_to_get_new_one_again):
+     - স্মার্ট এনআইডি রিপ্রিন্টের প্রয়োজন—হারানোর পরে করণীয় কী?
+     - হারানো NID-এর ডুপ্লিকেট স্মার্ট কার্ড ইস্যু এখন সম্ভব কি?
+
+16. goodbye ⇄ closing_statement
+   Expected→Predicted: 6 errors
+   Predicted→Expected: 7 errors
+   Total bidirectional: 13 errors
+   Pattern: SYMMETRIC (ratio: 1.17)
+   Example questions (expected: goodbye):
+     - পরে আবার আলাপ হবে ইনশাআল্লাহ।
+     - আমি এখানেই বিদায় নিচ্ছি, ভালো থাকবেন।
+
+17. smart_card_lost_reissue ⇄ smart_card_lost_how_to_get_new_one_again
+   Expected→Predicted: 5 errors
+   Predicted→Expected: 8 errors
+   Total bidirectional: 13 errors
+   Pattern: SYMMETRIC (ratio: 1.60)
+   Example questions (expected: smart_card_lost_reissue):
+     - হারানো স্মার্টকার্ডের বদলে নতুন কার্ড পাওয়ার নিয়ম কী?
+     - স্মার্ট কার্ড হারিয়ে কীভাবে ডুপ্লিকেটের জন্য আবেদন করব?
+
+18. closing_statement ⇄ goodbye
+   Expected→Predicted: 7 errors
+   Predicted→Expected: 6 errors
+   Total bidirectional: 13 errors
+   Pattern: SYMMETRIC (ratio: 1.17)
+   Example questions (expected: closing_statement):
+     - বিদায়, শুভ কামনা।
+     - আজকের জন্য এটাই যথেষ্ট, বিদায়।
+
+19. goodbye ⇄ request_for_feedback_or_suggestions
+   Expected→Predicted: 9 errors
+   Predicted→Expected: 3 errors
+   Total bidirectional: 12 errors
+   Pattern: ASYMMETRIC (ratio: 3.00)
+   Example questions (expected: goodbye):
+     - অনেক উপকার হয়েছে, বিদায়।
+     - ধন্যবাদ, এখন ইতি টানি?
+
+20. nid_registration_age ⇄ new_nid_card_age
+   Expected→Predicted: 5 errors
+   Predicted→Expected: 7 errors
+   Total bidirectional: 12 errors
+   Pattern: SYMMETRIC (ratio: 1.40)
+   Example questions (expected: nid_registration_age):
+     - ভোটার হওয়ার ন্যূনতম বয়স কত বছর ধরা আছে?
+     - ভোটার আইডির জন্য ন্যূনতম বয়স কতো ধরা?
+
+================================================================================
+PER-TAG ACCURACY (Lowest performing tags)
+================================================================================
+
+correction_application_current_status
+  Accuracy: 47.37% (18/38)
+  Errors: 20
+
+new_voter_apply_online_what_documents_needed
+  Accuracy: 50.00% (19/38)
+  Errors: 19
+
+card_information_correction
+  Accuracy: 52.63% (20/38)
+  Errors: 18
+
+online_application_pending
+  Accuracy: 52.63% (20/38)
+  Errors: 18
+
+goodbye
+  Accuracy: 55.26% (21/38)
+  Errors: 17
+
+card_correction_request_failed_query_regarding_repayment_fees
+  Accuracy: 57.89% (22/38)
+  Errors: 16
+
+delayed_question_prompt
+  Accuracy: 57.89% (22/38)
+  Errors: 16
+
+greetings
+  Accuracy: 57.89% (22/38)
+  Errors: 16
+
+new_voter_online_what_documents_to_submit
+  Accuracy: 57.89% (22/38)
+  Errors: 16
+
+photo_done_years_ago_but_no_card
+  Accuracy: 60.53% (23/38)
+  Errors: 15
+
+wish_to_create_nid_smart_card_new
+  Accuracy: 63.16% (24/38)
+  Errors: 14
+
+smart_card_fee
+  Accuracy: 63.16% (24/38)
+  Errors: 14
+
+closing_statement
+  Accuracy: 65.79% (25/38)
+  Errors: 13
+
+card_correction_request_failed_query_regarding_refund_fees
+  Accuracy: 71.05% (27/38)
+  Errors: 11
+
+husband_name_previous_card
+  Accuracy: 71.05% (27/38)
+  Errors: 11
+
+account_locked
+  Accuracy: 73.68% (28/38)
+  Errors: 10
+
+no_husband_name_in_smart_card
+  Accuracy: 73.68% (28/38)
+  Errors: 10
+
+nid_information_misentry_correction_procedure
+  Accuracy: 73.68% (28/38)
+  Errors: 10
+
+smart_card_lost_how_to_get_new_one_again
+  Accuracy: 73.68% (28/38)
+  Errors: 10
+
+voter_slip_lost_how_to_get_nid
+  Accuracy: 73.68% (28/38)
+  Errors: 10
+
+card_correction_request_canceled_by_consumer_regarding_refund_fees
+  Accuracy: 73.68% (28/38)
+  Errors: 10
+
+smart_card_collection_fees
+  Accuracy: 73.68% (28/38)
+  Errors: 10
+
+correction_application_status
+  Accuracy: 76.32% (29/38)
+  Errors: 9
+
+eight_hours_time_up
+  Accuracy: 76.32% (29/38)
+  Errors: 9
+
+whom_to_communicate_for_dual_citizenship_certificate
+  Accuracy: 78.95% (30/38)
+  Errors: 8
+
+picture_done_but_lost_or_no_sms_slip
+  Accuracy: 78.95% (30/38)
+  Errors: 8
+
+greeting_and_request_for_question
+  Accuracy: 78.95% (30/38)
+  Errors: 8
+
+new_nid_card_age
+  Accuracy: 78.95% (30/38)
+  Errors: 8
+
+request_for_feedback_or_suggestions
+  Accuracy: 78.95% (30/38)
+  Errors: 8
+
+online_card_correction
+  Accuracy: 81.58% (31/38)
+  Errors: 7
+
